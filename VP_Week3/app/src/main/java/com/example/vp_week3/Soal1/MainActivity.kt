@@ -31,10 +31,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material3.Icon
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 
 class MainActivity : ComponentActivity() {
@@ -78,6 +83,14 @@ fun timeCategory(avgTime: Long): result{
 @Composable
 fun Screen(modifier: Modifier = Modifier) {
     var Tampilan by rememberSaveable {mutableStateOf(tampilan.START)}
+
+    LaunchedEffect(Tampilan) {
+        if (Tampilan == tampilan.WAITING) {
+            val randomDelay = Random.nextLong(2000L, 5000L)
+            delay(randomDelay)
+            Tampilan = tampilan.GO
+        }
+    }
 
     if (Tampilan == tampilan.START) {
         Column(
@@ -126,13 +139,14 @@ fun Screen(modifier: Modifier = Modifier) {
     }
 
     else if (Tampilan == tampilan.WAITING) {
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
                 .background(Color.Gray)
                 .clickable {
-                    Tampilan = tampilan.RESULT
+                    Tampilan = tampilan.FAILED
                 }
         ) {
 
@@ -163,6 +177,99 @@ fun Screen(modifier: Modifier = Modifier) {
 
             Text(
                 text = "DON'T CLICK YET!",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 10.dp)
+            )
+        }
+    }
+
+    else if (Tampilan == tampilan.GO) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+                .background(Color.Green)
+                .clickable {
+                    Tampilan = tampilan.FAILED
+                }
+        ) {
+
+            Text(
+                text = "Go",
+                color = Color.White,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+
+            Icon(
+                imageVector = Icons.Default.DirectionsRun,
+                contentDescription = "lariiiii",
+                tint = Color.White,
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(bottom = 20.dp)
+            )
+
+            Text(
+                text= "Click Now!",
+                color = Color.White,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 10.dp)
+            )
+
+            Text(
+                text = "Tap as fast as you can!",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 10.dp)
+            )
+        }
+    }
+
+    else if (Tampilan == tampilan.FAILED) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+                .background(Color.Red)
+                .clickable {
+                    Tampilan = tampilan.FAILED
+                }
+        ) {
+
+            Text(
+                text = "Fail!",
+                color = Color.White,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+
+            Icon(
+                imageVector = Icons.Default.DirectionsRun,
+                contentDescription = "lariiiii",
+                tint = Color.White,
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(bottom = 20.dp)
+            )
+
+            Text(
+                text= "You clicked too early, TRY TO READ THE RULE BRO",
+                color = Color.White,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+
+                modifier = Modifier.padding(bottom = 10.dp)
+            )
+
+            Text(
+                text = "TRY AGAIN",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal,
